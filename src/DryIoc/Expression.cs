@@ -2262,14 +2262,22 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public sealed class NotBooleanUnaryExpression : UnaryExpression
     {
         public override ExpressionType NodeType => ExpressionType.Not;
-        public override Type Type => typeof(bool);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(bool);
+        }
         public NotBooleanUnaryExpression(Expression operand) : base(operand) { }
     }
 
     public sealed class ThrowUnaryExpression : UnaryExpression
     {
         public override ExpressionType NodeType => ExpressionType.Throw;
-        public override Type Type => typeof(void);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(void);
+        }
         public ThrowUnaryExpression(Expression operand) : base(operand) { }
     }
 
@@ -2287,7 +2295,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public sealed class TypedUnaryExpression<T> : UnaryExpression
     {
         public override ExpressionType NodeType { get; }
-        public override Type Type => typeof(T);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(T);
+        }
         public TypedUnaryExpression(ExpressionType nodeType, Expression operand) : base(operand) =>
             NodeType = nodeType;
     }
@@ -2302,7 +2314,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public sealed class TypedConvertUnaryExpression<T> : UnaryExpression
     {
         public override ExpressionType NodeType => ExpressionType.Convert;
-        public override Type Type => typeof(T);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(T);
+        }
         public TypedConvertUnaryExpression(Expression operand) : base(operand) { }
     }
 
@@ -2317,7 +2333,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public class ConvertViaCastClassIntrinsicExpression<T> : UnaryExpression where T : class
     {
         public sealed override ExpressionType NodeType => ExpressionType.Convert;
-        public override Type Type => typeof(T);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(T);
+        }
         public ConvertViaCastClassIntrinsicExpression(Expression operand) : base(operand) { }
 
         public override bool IsIntrinsic => true;
@@ -2406,7 +2426,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     internal sealed class LogicalBinaryExpression : BinaryExpression
     {
         public override ExpressionType NodeType { get; }
-        public override Type Type => typeof(bool);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(bool);
+        }
         internal LogicalBinaryExpression(ExpressionType nodeType, Expression left, Expression right) : base(left, right) =>
             NodeType = nodeType;
 
@@ -2442,7 +2466,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     internal sealed class LeftTypedBinaryExpression : BinaryExpression
     {
         public override ExpressionType NodeType { get; }
-        public override Type Type => Left.Type;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => Left.Type;
+        }
         internal LeftTypedBinaryExpression(ExpressionType nodeType, Expression left, Expression right) : base(left, right) =>
             NodeType = nodeType;
     }
@@ -2450,7 +2478,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     internal sealed class LiftedToNullBinaryExpression : BinaryExpression
     {
         public override ExpressionType NodeType { get; }
-        public override Type Type => typeof(bool?);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(bool?);
+        }
         internal LiftedToNullBinaryExpression(ExpressionType nodeType, Expression left, Expression right) : base(left, right) => NodeType = nodeType;
         internal override SysExpr CreateSysExpression(ref LiveCountArray<LightAndSysExpr> exprsConverted) =>
             SysExpr.MakeBinary(NodeType, Left.ToExpression(ref exprsConverted), Right.ToExpression(ref exprsConverted), true, null);
@@ -2470,7 +2502,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
 
     internal sealed class CoalesceConversionBinaryExpression : CoalesceBinaryExpression
     {
-        public override Type Type => Right.Type;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => Right.Type;
+        }
         public override LambdaExpression Conversion { get; }
 
         internal CoalesceConversionBinaryExpression(Expression left, Expression right, LambdaExpression conversion)
@@ -2484,7 +2520,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public sealed class ArrayIndexExpression : BinaryExpression
     {
         public override ExpressionType NodeType => ExpressionType.ArrayIndex;
-        public override Type Type => Left.Type.GetElementType();
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => Left.Type.GetElementType();
+        }
         internal ArrayIndexExpression(Expression left, Expression right) : base(left, right) { }
     }
 
@@ -2548,7 +2588,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public sealed class ListInitExpression : Expression
     {
         public override ExpressionType NodeType => ExpressionType.ListInit;
-        public override Type Type => NewExpression.Type;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => NewExpression.Type;
+        }
         public readonly NewExpression NewExpression;
         public readonly IReadOnlyList<ElementInit> Initializers;
         internal ListInitExpression(NewExpression newExpression, IReadOnlyList<ElementInit> initializers)
@@ -2580,7 +2624,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public sealed class TypeBinaryExpression : Expression
     {
         public override ExpressionType NodeType { get; }
-        public override Type Type => typeof(bool);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(bool);
+        }
         public Type TypeOperand { get; }
         public readonly Expression Expression;
         internal TypeBinaryExpression(ExpressionType nodeType, Expression expression, Type typeOperand)
@@ -2607,7 +2655,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public class MemberInitExpression : Expression, IArgumentProvider<MemberBinding>
     {
         public sealed override ExpressionType NodeType => ExpressionType.MemberInit;
-        public override Type Type => Expression.Type;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => Expression.Type;
+        }
         public readonly Expression Expression;
         public NewExpression NewExpression => Expression as NewExpression;
         public virtual IReadOnlyList<MemberBinding> Bindings => Tools.Empty<MemberBinding>();
@@ -2762,7 +2814,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
 
     public sealed class TypedParameterExpression<T> : ParameterExpression
     {
-        public override Type Type => typeof(T);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(T);
+        }
         internal TypedParameterExpression(string name) : base(name) { }
     }
 
@@ -2790,19 +2846,31 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public sealed class NullConstantExpression<T> : ConstantExpression
     {
         public override object Value => null;
-        public override Type Type => typeof(T);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(T);
+        }
     }
 
     public sealed class ValueConstantExpression : ConstantExpression
     {
-        public override Type Type => Value.GetType();
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => Value.GetType();
+        }
         public override object Value { get; }
         internal ValueConstantExpression(object value) => Value = value;
     }
 
     public sealed class ValueConstantExpression<T> : ConstantExpression
     {
-        public override Type Type => typeof(T);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(T);
+        }
         public override object Value { get; }
         internal ValueConstantExpression(object value) => Value = value;
     }
@@ -2816,7 +2884,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
 
     public sealed class IntConstantExpression : ConstantExpression
     {
-        public override Type Type => typeof(int);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(int);
+        }
         public override object Value => IntValue;
         public readonly int IntValue;
         internal IntConstantExpression(int value) => IntValue = value;
@@ -2825,7 +2897,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public class NewExpression : Expression, IArgumentProvider
     {
         public sealed override ExpressionType NodeType => ExpressionType.New;
-        public override Type Type => Constructor.DeclaringType;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => Constructor.DeclaringType;
+        }
         public readonly ConstructorInfo Constructor;
         public virtual IReadOnlyList<Expression> Arguments => Tools.Empty<Expression>();
         public virtual int ArgumentCount => 0;
@@ -3478,7 +3554,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
 
     public class PropertyExpression : MemberExpression
     {
-        public override Type Type => PropertyInfo.PropertyType;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => PropertyInfo.PropertyType;
+        }
         public PropertyInfo PropertyInfo => (PropertyInfo)Member;
         internal PropertyExpression(PropertyInfo property) : base(property) { }
 
@@ -3495,7 +3575,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
 
     public class FieldExpression : MemberExpression
     {
-        public override Type Type => FieldInfo.FieldType;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => FieldInfo.FieldType;
+        }
         public FieldInfo FieldInfo => (FieldInfo)Member;
         internal FieldExpression(FieldInfo field) : base(field) { }
 
@@ -3567,7 +3651,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public class InvocationExpression : Expression, IArgumentProvider
     {
         public sealed override ExpressionType NodeType => ExpressionType.Invoke;
-        public override Type Type => ((LambdaExpression)Expression).ReturnType;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => ((LambdaExpression)Expression).ReturnType;
+        }
         public virtual Expression Expression => null;
         public virtual IReadOnlyList<Expression> Arguments => Tools.Empty<Expression>();
         public virtual int ArgumentCount => 0;
@@ -3738,7 +3826,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public class ConditionalExpression : Expression
     {
         public override ExpressionType NodeType => ExpressionType.Conditional;
-        public override Type Type => typeof(void);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(void);
+        }
         public readonly Expression Test;
         public readonly Expression IfTrue;
         public virtual Expression IfFalse => VoidDefault;
@@ -3764,7 +3856,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
 
     public sealed class WithFalseBranchConditionalExpression : VoidWithFalseBranchConditionalExpression
     {
-        public override Type Type => IfTrue.Type;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => IfTrue.Type;
+        }
         internal WithFalseBranchConditionalExpression(Expression test, Expression ifTrue, Expression ifFalse)
             : base(test, ifTrue, ifFalse) { }
     }
@@ -3832,7 +3928,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public class BlockExpression : Expression, IArgumentProvider
     {
         public override ExpressionType NodeType => ExpressionType.Block;
-        public override Type Type => Result.Type;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => Result.Type;
+        }
         public virtual IReadOnlyList<ParameterExpression> Variables => Tools.Empty<ParameterExpression>();
         public readonly IReadOnlyList<Expression> Expressions;
         public Expression Result => Expressions[Expressions.Count - 1];
@@ -3875,7 +3975,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public sealed class LoopExpression : Expression
     {
         public override ExpressionType NodeType => ExpressionType.Loop;
-        public override Type Type => typeof(void);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(void);
+        }
         public readonly Expression Body;
         public readonly LabelTarget BreakLabel;
         public readonly LabelTarget ContinueLabel;
@@ -3901,7 +4005,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public class TryExpression : Expression
     {
         public override ExpressionType NodeType => ExpressionType.Try;
-        public override Type Type => Body.Type;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => Body.Type;
+        }
         public readonly Expression Body;
         public IReadOnlyList<CatchBlock> Handlers => _handlers;
         private readonly CatchBlock[] _handlers;
@@ -3968,7 +4076,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public class LabelExpression : Expression
     {
         public override ExpressionType NodeType => ExpressionType.Label;
-        public override Type Type => Target.Type;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => Target.Type;
+        }
         public readonly LabelTarget Target;
         public virtual Expression DefaultValue => null;
         internal LabelExpression(LabelTarget target) => Target = target;
@@ -4034,7 +4146,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public class GotoExpression : Expression
     {
         public override ExpressionType NodeType => ExpressionType.Goto;
-        public override Type Type => typeof(void);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(void);
+        }
         public virtual GotoExpressionKind Kind => GotoExpressionKind.Goto;
         public virtual Expression Value => null;
         public readonly LabelTarget Target;
@@ -4048,7 +4164,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
 
     public class ValueGotoExpression : GotoExpression
     {
-        public override Type Type => Target.Type; // non-void when the Value expression is provided
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => Target.Type; // non-void when the Value expression is provided
+        }
         public override Expression Value { get; }
         internal ValueGotoExpression(LabelTarget target, Expression value) : base(target) =>
             Value = value;
@@ -4540,7 +4660,11 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public sealed class DynamicExpression : Expression
     {
         public override ExpressionType NodeType => ExpressionType.Dynamic;
-        public override Type Type => typeof(object);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+            get => typeof(object);
+        }
         public Type DelegateType { get; }
         public CallSiteBinder Binder { get; }
         public IReadOnlyList<Expression> Arguments { get; }

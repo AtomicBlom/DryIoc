@@ -246,7 +246,7 @@ namespace DryIoc
         /// <param name="isStaticallyChecked">Confirms that service and implementation types are statically checked by compiler.</param>
         /// <returns>True if factory was added to registry, false otherwise.
         /// False may be in case of <see cref="IfAlreadyRegistered.Keep"/> setting and already existing factory.</returns>
-        public void Register(Factory factory, Type serviceType, object serviceKey, IfAlreadyRegistered? ifAlreadyRegistered, bool isStaticallyChecked)
+    public void Register(Factory factory, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, object serviceKey, IfAlreadyRegistered? ifAlreadyRegistered, bool isStaticallyChecked)
         {
             ThrowIfRootContainerDisposed();
 
@@ -267,7 +267,7 @@ namespace DryIoc
         }
 
         // hiding nested lambda in method to reduce allocations
-        private ImHashMap<Type, object> RegistrySwap(Factory factory, Type serviceType, object serviceKey, IfAlreadyRegistered? ifAlreadyRegistered) =>
+        private ImHashMap<Type, object> RegistrySwap(Factory factory, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, object serviceKey, IfAlreadyRegistered? ifAlreadyRegistered) =>
             _registry.Swap(r => Registry.Register(r, factory, serviceType, ifAlreadyRegistered.Value, serviceKey));
 
         /// <inheritdoc />
@@ -7595,17 +7595,17 @@ namespace DryIoc
     public static class Registrator
     {
         /// <summary>The base method for registering service with its implementation factory. Allows to specify all possible options.</summary>
-        public static void Register(this IRegistrator registrator, Type serviceType, Factory factory,
+        public static void Register(this IRegistrator registrator, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, Factory factory,
             IfAlreadyRegistered? ifAlreadyRegistered = null, object serviceKey = null) =>
             registrator.Register(factory, serviceType, serviceKey, ifAlreadyRegistered, false);
 
         /// <summary>Registers service <paramref name="serviceType"/> with corresponding <paramref name="implementationType"/>.</summary>
         [MethodImpl((MethodImplOptions)256)]
-        public static void Register(this IRegistrator registrator, Type serviceType, Type implementationType, IReuse reuse) =>
+        public static void Register(this IRegistrator registrator, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, Type implementationType, IReuse reuse) =>
             registrator.Register(ReflectionFactory.Of(implementationType, reuse), serviceType, null, null, false);
 
         /// <summary>Registers service <paramref name="serviceType"/> with corresponding <paramref name="implementationType"/>.</summary>
-        public static void Register(this IRegistrator registrator, Type serviceType, Type implementationType,
+    public static void Register(this IRegistrator registrator, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, Type implementationType,
             IReuse reuse = null, Made made = null, Setup setup = null, IfAlreadyRegistered? ifAlreadyRegistered = null,
             object serviceKey = null) =>
             registrator.Register(ReflectionFactory.Of(implementationType, reuse, made, setup),
@@ -7613,7 +7613,7 @@ namespace DryIoc
 
         /// <summary>Registers service of <paramref name="serviceAndMayBeImplementationType"/>.
         /// ServiceType may be the same as <paramref name="serviceAndMayBeImplementationType"/>.</summary>
-        public static void Register(this IRegistrator registrator, Type serviceAndMayBeImplementationType,
+    public static void Register(this IRegistrator registrator, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceAndMayBeImplementationType,
             IReuse reuse = null, Made made = null, Setup setup = null, IfAlreadyRegistered? ifAlreadyRegistered = null,
             object serviceKey = null) =>
             registrator.Register(ReflectionFactory.Of(serviceAndMayBeImplementationType, reuse, made, setup),
@@ -7654,7 +7654,7 @@ namespace DryIoc
         /// Look at the `Use` method to put instance directly into current or singleton scope,
         /// though without ability to use decorators and wrappers on it.
         /// </summary>
-        public static void RegisterInstance(this IRegistrator registrator, bool isChecked, Type serviceType, object instance,
+    public static void RegisterInstance(this IRegistrator registrator, bool isChecked, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, object instance,
             IfAlreadyRegistered? ifAlreadyRegistered = null, Setup setup = null, object serviceKey = null)
         {
             registrator.Register(InstanceFactory.Of(instance, setup),
@@ -7685,7 +7685,7 @@ namespace DryIoc
         /// Look at the `Use` method to put instance directly into current or singleton scope,
         /// though without ability to use decorators and wrappers on it.
         /// </summary>
-        public static void RegisterInstance(this IRegistrator registrator, Type serviceType, object instance,
+    public static void RegisterInstance(this IRegistrator registrator, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, object instance,
             IfAlreadyRegistered? ifAlreadyRegistered = null, Setup setup = null, object serviceKey = null) =>
             registrator.RegisterInstance(false, serviceType, instance, ifAlreadyRegistered, setup, serviceKey);
 
@@ -8477,7 +8477,7 @@ namespace DryIoc
         /// <summary>Returns true if <paramref name="serviceType"/> is registered in container OR
         /// its open generic definition is registered in container.
         /// The additional implementation factory <paramref name="condition"/> may be specified to narrow the search.</summary>
-        public static bool IsRegistered(this IRegistrator registrator, Type serviceType,
+    public static bool IsRegistered(this IRegistrator registrator, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType,
             object serviceKey = null, FactoryType factoryType = FactoryType.Service, Func<Factory, bool> condition = null) =>
             registrator.IsRegistered(serviceType, serviceKey, factoryType, condition);
 
@@ -8491,7 +8491,7 @@ namespace DryIoc
         /// <summary>Removes specified registration from container.
         /// It also tries to remove the cached resolutions for the removed registration, But it may not work depending on context.
         /// Check the docs for more info: https://github.com/dadhi/DryIoc/blob/master/docs/DryIoc.Docs/UnregisterAndResolutionCache.md </summary>
-        public static void Unregister(this IRegistrator registrator, Type serviceType,
+    public static void Unregister(this IRegistrator registrator, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType,
             object serviceKey = null, FactoryType factoryType = FactoryType.Service, Func<Factory, bool> condition = null) =>
             registrator.Unregister(serviceType, serviceKey, factoryType, condition);
 
@@ -8509,7 +8509,7 @@ namespace DryIoc
         /// <param name="ifAlreadyRegistered">The registration to overwrite or preserve the already registered service</param>
         /// <param name="serviceKey">(optional)</param> <param name="registeredServiceKey">(optional)</param>
         /// <param name="factoryType">(optional) By default is <see cref="FactoryType.Service"/></param>
-        public static void RegisterMapping(this IRegistrator registrator, Type serviceType, Type registeredServiceType,
+    public static void RegisterMapping(this IRegistrator registrator, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, Type registeredServiceType,
             IfAlreadyRegistered? ifAlreadyRegistered, object serviceKey = null, object registeredServiceKey = null, FactoryType factoryType = FactoryType.Service)
         {
             var factories = registrator.GetRegisteredFactories(registeredServiceType, registeredServiceKey, factoryType);
@@ -8525,7 +8525,7 @@ namespace DryIoc
 
         /// <summary>Registers new service type with factory for registered service type.
         /// Throw if no such registered service type in container.</summary>
-        public static void RegisterMapping(this IRegistrator registrator, Type serviceType, Type registeredServiceType,
+    public static void RegisterMapping(this IRegistrator registrator, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, Type registeredServiceType,
             object serviceKey = null, object registeredServiceKey = null, FactoryType factoryType = FactoryType.Service) =>
             registrator.RegisterMapping(serviceType, registeredServiceType, null, serviceKey, registeredServiceKey, factoryType);
 
@@ -8547,7 +8547,7 @@ namespace DryIoc
         /// <remarks>Internally the empty factory is registered with the setup `asResolutionCall: true`.
         /// That means, instead of placing service instance into graph expression we put here redirecting call to
         /// container Resolve.</remarks>
-        public static void RegisterPlaceholder(this IRegistrator registrator, Type serviceType,
+    public static void RegisterPlaceholder(this IRegistrator registrator, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType,
             IfAlreadyRegistered? ifAlreadyRegistered = null, object serviceKey = null) =>
             registrator.Register(FactoryPlaceholder.Default, serviceType, serviceKey, ifAlreadyRegistered, true);
 
@@ -11585,6 +11585,11 @@ namespace DryIoc
                 return null;
             }
         }
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors
+            | DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods
+            | DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties
+            | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields
+            | DynamicallyAccessedMemberTypes.Interfaces)]
         internal object _implementationTypeOrProviderOrPubCtorOrCtors; // Type or the Func<Type> for the lazy factory initialization
 
         private static Type ValidateImplementationType(Type type)
