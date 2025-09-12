@@ -7830,7 +7830,7 @@ namespace DryIoc
 
         // todo: @bug @perf why don't we just IsAssignableFrom
         /// <summary>The same `GetImplementedServiceTypes` but instead of collecting the service types just check the <paramref name="serviceType"/> is implemented</summary>
-        public static bool IsImplementingServiceType(this Type type, Type serviceType)
+        public static bool IsImplementingServiceType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] this Type type, Type serviceType)
         {
             if (serviceType == type || serviceType == typeof(object))
                 return true;
@@ -10891,7 +10891,12 @@ namespace DryIoc
         public FactoryType FactoryType => Setup.FactoryType;
 
         /// <summary>Non-abstract closed implementation type. May be null if not known beforehand, e.g. in <see cref="DelegateFactory"/>.</summary>
-        public virtual Type ImplementationType => null;
+        
+        public virtual Type ImplementationType
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.Interfaces)]
+            get => null;
+        }
 
         /// <summary>Allow inheritors to define lazy implementation type</summary>
         public virtual bool CanAccessImplementationType => true;
@@ -11176,7 +11181,7 @@ namespace DryIoc
         public virtual FactoryDelegate GetDelegateOrDefault(Request request) =>
             GetExpressionOrDefault(request)?.CompileToFactoryDelegate(request.Rules.UseInterpretation);
 
-        internal virtual bool ValidateAndNormalizeRegistration(Type serviceType, object serviceKey, bool isStaticallyChecked, Rules rules, bool throwIfInvalid)
+        internal virtual bool ValidateAndNormalizeRegistration([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, object serviceKey, bool isStaticallyChecked, Rules rules, bool throwIfInvalid)
         {
             if (serviceType == null)
                 return Throw.When(throwIfInvalid, Error.ServiceTypeIsNull);
@@ -11567,6 +11572,7 @@ namespace DryIoc
         /// <summary>Non-abstract service implementation type. May be open generic.</summary>
         public override Type ImplementationType
         {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.Interfaces)]
             get
             {
                 var x = _implementationTypeOrProviderOrPubCtorOrCtors;
@@ -12247,7 +12253,7 @@ namespace DryIoc
             return null;
         }
 
-        internal override bool ValidateAndNormalizeRegistration(Type serviceType, object serviceKey, bool isStaticallyChecked, Rules rules, bool throwIfInvalid)
+        internal override bool ValidateAndNormalizeRegistration([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] Type serviceType, object serviceKey, bool isStaticallyChecked, Rules rules, bool throwIfInvalid)
         {
             if (!base.ValidateAndNormalizeRegistration(serviceType, serviceKey, isStaticallyChecked, rules, throwIfInvalid))
                 return false;
@@ -14863,7 +14869,7 @@ namespace DryIoc
         /// <summary>Returns all interfaces and all base types (in that order) implemented by <paramref name="sourceType"/>.
         /// Specify <paramref name="asImplementedType"/> to include <paramref name="sourceType"/> itself as first item and
         /// <see cref="object"/> type as the last item.</summary>
-        public static Type[] GetImplementedTypes(this Type sourceType, AsImplementedType asImplementedType = AsImplementedType.None)
+        public static Type[] GetImplementedTypes([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] this Type sourceType, AsImplementedType asImplementedType = AsImplementedType.None)
         {
             Type[] results;
 

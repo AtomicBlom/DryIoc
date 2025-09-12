@@ -30,6 +30,7 @@ THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -48,8 +49,12 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     {
         /// <summary>Expression node type.</summary>
         public abstract ExpressionType NodeType { get; }
+
         /// <summary>All expressions should have a Type.</summary>
-        public abstract Type Type { get; }
+        public abstract Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] get;
+        }
 
         /// <summary>You may use it whatever you like overloading for the specific value in your custom expression.</summary>
         public virtual object Tag => null;
@@ -904,7 +909,7 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
             Lambda<TDelegate>(body, parameters, GetDelegateReturnType(typeof(TDelegate)));
 
         [MethodImpl((MethodImplOptions)256)]
-        private static Type GetDelegateReturnType(Type delegateType) => delegateType.GetMethod("Invoke").ReturnType;
+        private static Type GetDelegateReturnType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type delegateType) => delegateType.GetMethod("Invoke").ReturnType;
 
         /// <summary>Creates a BinaryExpression that represents applying an array index operator to an array of rank one.</summary>
         /// <param name="array">A Expression to set the Left property equal to.</param>
@@ -2205,7 +2210,12 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
 
     public abstract class UnaryExpression : Expression
     {
-        public override Type Type => Operand.Type;
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] 
+            get => Operand.Type;
+        }
+
         public readonly Expression Operand;
         public virtual MethodInfo Method => null;
         public UnaryExpression(Expression operand) => Operand = operand;
@@ -2708,7 +2718,12 @@ namespace DryIoc.FastExpressionCompiler.LightExpression
     public class ParameterExpression : Expression
     {
         public sealed override ExpressionType NodeType => ExpressionType.Parameter;
-        public override Type Type => typeof(object);
+        public override Type Type
+        {
+            [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] 
+            get => typeof(object);
+        }
+
         public virtual bool IsByRef => false;
         public string Name { get; }
         internal ParameterExpression(string name) => Name = name;

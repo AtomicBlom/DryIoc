@@ -25,6 +25,8 @@ THE SOFTWARE.
 
 // ReSharper disable once InconsistentNaming
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace DryIoc.ImTools
 {
     using System;
@@ -103,7 +105,7 @@ namespace DryIoc.ImTools
     public static class Lazy
     {
         /// <summary>Provides result type inference for creation of lazy.</summary>
-        public static Lazy<T> Of<T>(Func<T> valueFactory) => new Lazy<T>(valueFactory);
+        public static Lazy<T> Of<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] T>(Func<T> valueFactory) => new Lazy<T>(valueFactory);
     }
 
     /// <summary>Just a helper state with the number of mutable fields with the nice names ;) Maybe used together with Fold or other methods required state</summary>
