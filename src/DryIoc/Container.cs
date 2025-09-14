@@ -11585,12 +11585,7 @@ namespace DryIoc
                 return null;
             }
         }
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors
-            | DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods
-            | DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties
-            | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields
-            | DynamicallyAccessedMemberTypes.Interfaces)]
-        internal object _implementationTypeOrProviderOrPubCtorOrCtors; // Type or the Func<Type> for the lazy factory initialization
+    internal object _implementationTypeOrProviderOrPubCtorOrCtors; // Type or the Func<Type> for the lazy factory initialization
 
         private static Type ValidateImplementationType(Type type)
         {
@@ -15067,16 +15062,16 @@ namespace DryIoc
 
         /// <summary>Returns all public instance constructors for the type</summary>
         [MethodImpl((MethodImplOptions)256)]
-        public static ConstructorInfo[] PublicConstructors(this Type type) =>
+        public static ConstructorInfo[] PublicConstructors([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] this Type type) =>
             type.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
 
         /// <summary>Returns all public instance constructors for the type</summary>
         [MethodImpl((MethodImplOptions)256)]
-        public static IEnumerable<ConstructorInfo> PublicAndInternalConstructors(this Type type) =>
+        public static IEnumerable<ConstructorInfo> PublicAndInternalConstructors([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] this Type type) =>
             type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
         /// <summary>Enumerates all constructors from input type.</summary>
-        public static IEnumerable<ConstructorInfo> Constructors(this Type type, bool includeNonPublic = false, bool includeStatic = false)
+    public static IEnumerable<ConstructorInfo> Constructors([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] this Type type, bool includeNonPublic = false, bool includeStatic = false)
         {
             var flags = BindingFlags.Public | BindingFlags.Instance;
             if (includeNonPublic)
@@ -15087,7 +15082,7 @@ namespace DryIoc
         }
 
         /// <summary>Searches and returns the first constructor by its signature, e.g. with the same number of parameters of the same type.</summary>
-        public static ConstructorInfo GetConstructorOrNull(this Type type, bool includeNonPublic = false, params Type[] args)
+    public static ConstructorInfo GetConstructorOrNull([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] this Type type, bool includeNonPublic = false, params Type[] args)
         {
             var argsLength = args.Length;
             var flags = BindingFlags.Public | BindingFlags.Instance;
@@ -15097,7 +15092,7 @@ namespace DryIoc
         }
 
         /// <summary>Searches and returns constructor by its signature.</summary>
-        public static ConstructorInfo GetConstructorOrNull(this Type type, params Type[] args) =>
+        public static ConstructorInfo GetConstructorOrNull([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] this Type type, params Type[] args) =>
             type.GetConstructorOrNull(true, args);
 
         /// <summary>Searches and returns constructor by its signature, or throws if not found</summary>
@@ -15105,7 +15100,7 @@ namespace DryIoc
             type.GetConstructorOrNull(includeNonPublic: true, args: args).ThrowIfNull(Error.UnableToFindConstructorWithArgs, type, args);
 
         /// <summary>Returns single constructor otherwise (if no constructor or more than one) returns null.</summary>
-        public static ConstructorInfo GetSingleConstructorOrNull(this Type type, bool includeNonPublic = false)
+    public static ConstructorInfo GetSingleConstructorOrNull([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] this Type type, bool includeNonPublic = false)
         {
             ConstructorInfo ctor = null;
             var ctors = Constructors(type, includeNonPublic, includeStatic: false).ToArrayOrSelf();
@@ -15122,11 +15117,11 @@ namespace DryIoc
         }
 
         /// <summary>Returns single constructor otherwise (if no or more than one) throws an exception</summary>
-        public static ConstructorInfo SingleConstructor(this Type type, bool includeNonPublic = false) =>
+        public static ConstructorInfo SingleConstructor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] this Type type, bool includeNonPublic = false) =>
             type.GetSingleConstructorOrNull(includeNonPublic).ThrowIfNull(Error.UnableToFindSingleConstructor, type, includeNonPublic);
 
-        /// <summary>Looks up for single declared method with the specified name. Returns null if method is not found.</summary>
-        public static MethodInfo GetSingleMethodOrNull(this Type type, string name, bool includeNonPublic = false)
+    /// <summary>Looks up for single declared method with the specified name. Returns null if method is not found.</summary>
+    public static MethodInfo GetSingleMethodOrNull([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)] this Type type, string name, bool includeNonPublic = false)
         {
             if (includeNonPublic)
             {
@@ -15145,17 +15140,17 @@ namespace DryIoc
         }
 
         /// <summary>Looks for single declared (not inherited) method by name, and throws if not found.</summary>
-        public static MethodInfo SingleMethod(this Type type, string name, bool includeNonPublic = false) =>
+        public static MethodInfo SingleMethod([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)] this Type type, string name, bool includeNonPublic = false) =>
             type.GetSingleMethodOrNull(name, includeNonPublic).ThrowIfNull(
                 Error.UndefinedMethodWhenGettingTheSingleMethod, name, type, includeNonPublic);
 
         /// <summary>Looks up for method with and specified parameter types.</summary>
-        public static MethodInfo Method(this Type type, string name, params Type[] args) =>
+        public static MethodInfo Method([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)] this Type type, string name, params Type[] args) =>
             type.GetMethodOrNull(name, args).ThrowIfNull(
                 Error.UndefinedMethodWhenGettingMethodWithSpecifiedParameters, name, type, args);
 
-        /// <summary>Looks up for method with and specified parameter types.</summary>
-        public static MethodInfo GetMethodOrNull(this Type type, string name, params Type[] paramTypes)
+    /// <summary>Looks up for method with and specified parameter types.</summary>
+    public static MethodInfo GetMethodOrNull([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)] this Type type, string name, params Type[] paramTypes)
         {
             var pTypesCount = paramTypes.Length;
             var methods = type.GetTypeInfo().DeclaredMethods.ToArrayOrSelf();
@@ -15184,11 +15179,11 @@ namespace DryIoc
         }
 
         /// <summary>Returns property by name, including inherited. Or null if not found.</summary>
-        public static PropertyInfo Property(this Type type, string name, bool includeBase = false) =>
+        public static PropertyInfo Property([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)] this Type type, string name, bool includeBase = false) =>
             type.GetPropertyOrNull(name, includeBase).ThrowIfNull(Error.UndefinedPropertyWhenGettingProperty, name, type);
 
-        /// <summary>Returns property by name, including inherited. Or null if not found.</summary>
-        public static PropertyInfo GetPropertyOrNull(this Type type, string name, bool includeBase = false)
+    /// <summary>Returns property by name, including inherited. Or null if not found.</summary>
+    public static PropertyInfo GetPropertyOrNull([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)] this Type type, string name, bool includeBase = false)
         {
             var props = type.GetTypeInfo().DeclaredProperties.ToArrayOrSelf();
             for (var i = 0; i < props.Length; i++)
@@ -15202,11 +15197,11 @@ namespace DryIoc
         }
 
         /// <summary>Returns field by name, including inherited. Or null if not found.</summary>
-        public static FieldInfo Field(this Type type, string name, bool includeBase = false) =>
+        public static FieldInfo Field([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] this Type type, string name, bool includeBase = false) =>
             type.GetFieldOrNull(name, includeBase).ThrowIfNull(Error.UndefinedFieldWhenGettingField, name, type);
 
-        /// <summary>Returns field by name, including inherited. Or null if not found.</summary>
-        public static FieldInfo GetFieldOrNull(this Type type, string name, bool includeBase = false)
+    /// <summary>Returns field by name, including inherited. Or null if not found.</summary>
+    public static FieldInfo GetFieldOrNull([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] this Type type, string name, bool includeBase = false)
         {
             var fields = type.GetTypeInfo().DeclaredFields.ToArrayOrSelf();
             for (var i = 0; i < fields.Length; i++)
