@@ -9674,6 +9674,12 @@ namespace DryIoc
         internal Factory Factory => _factoryOrImplType as Factory;
 
         /// <summary>Service implementation type if known.</summary>
+        [DynamicallyAccessedMembers(
+            DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors |
+            DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
+            DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties |
+            DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
+            DynamicallyAccessedMemberTypes.Interfaces)]
         public Type ImplementationType => _factoryOrImplType as Type ?? (_factoryOrImplType as Factory)?.ImplementationType;
         
         /// <summary>Sets the service factory already resolved by the wrapper to save for the future factory resolution</summary>
@@ -15096,7 +15102,7 @@ namespace DryIoc
             type.GetConstructorOrNull(true, args);
 
         /// <summary>Searches and returns constructor by its signature, or throws if not found</summary>
-        public static ConstructorInfo Constructor(this Type type, params Type[] args) =>
+        public static ConstructorInfo Constructor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] this Type type, params Type[] args) =>
             type.GetConstructorOrNull(includeNonPublic: true, args: args).ThrowIfNull(Error.UnableToFindConstructorWithArgs, type, args);
 
         /// <summary>Returns single constructor otherwise (if no constructor or more than one) returns null.</summary>

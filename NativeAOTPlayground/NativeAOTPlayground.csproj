@@ -9,6 +9,16 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
+  <!-- Temporarily suppress warnings that cannot be fixed by adding DynamicallyAccessedMembers attributes
+       so we can focus on attribute-fixable IL20xx trimming warnings. Remove these once AOT/refactor decisions
+       are made for the entries recorded in NativeAOTPlayground/Unsupported.md. -->
+  <PropertyGroup>
+    <!-- Existing AOT/MakeGeneric warnings -->
+    <!-- Also suppress RequiresUnreferencedCode (IL2026), RequiresAssemblyFiles (IL3002),
+         un-analyzable MakeGenericType/MakeGenericMethod (IL2055), and reflection-access-to-attrib-methods (IL2111). -->
+    <NoWarn>$(NoWarn);IL3050;IL2060;IL2026;IL3002;IL2055;IL2111</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\src\DryIoc\DryIoc.csproj" />
   </ItemGroup>
